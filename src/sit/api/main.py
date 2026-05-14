@@ -8,6 +8,7 @@ until the Phase-6 deploy lands.
 
 from __future__ import annotations
 
+import importlib
 import json
 import logging
 import os
@@ -61,9 +62,8 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 
     if settings.applicationinsights_connection_string:
         try:  # pragma: no cover - optional
-            from azure.monitor.opentelemetry import (  # type: ignore[import-not-found]
-                configure_azure_monitor,
-            )
+            azure_monitor = importlib.import_module("azure.monitor.opentelemetry")
+            configure_azure_monitor = azure_monitor.configure_azure_monitor
 
             configure_azure_monitor(
                 connection_string=settings.applicationinsights_connection_string,
