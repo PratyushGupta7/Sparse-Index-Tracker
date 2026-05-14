@@ -1,0 +1,54 @@
+services:
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile
+    image: sparse-tracker-api:local
+    depends_on:
+      redis:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    environment:
+      SIT_ENV: docker
+      SIT_APP_VERSION: "1.0.0"
+      SIT_GIT_SHA: local-docker
+      SIT_DATA_DIR: /app/data
+      SIT_BENCHMARKS_DIR: /app/benchmarks/_results
+      SIT_ALLOWED_ORIGINS: '["http://localhost:3000","http://127.0.0.1:3000"]'
+      SIT_REDIS_URL: redis://redis:6379/0
+      SIT_REDIS_TTL_S: "300"
+      SIT_RATE_LIMITS_ENABLED: "true"
+      SIT_RATE_LIMIT_DEFAULT: 120/minute
+      SIT_RATE_LIMIT_INVEST: 120/minute
+      SIT_RATE_LIMIT_INVEST_LIVE: 30/minute
+      SIT_LIVE_UNIVERSE_MAX_TICKERS: "120"
+      SIT_LIVE_UNIVERSE_CAP_THRESHOLD: "750"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/v1/health', timeout=5)",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+volumes:
+  redis-data:

@@ -1,0 +1,43 @@
+# =============================================================================
+# Docker build context exclusions
+# =============================================================================
+.venv/
+.git/
+.gitignore
+.github/
+.vscode/
+.idea/
+.DS_Store
+
+# Build / test artefacts
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+.hypothesis/
+
+# Notebooks, plots, paper, frontend — not needed at runtime
+notebooks/
+plots/
+paper/
+frontend/
+# Keep deploy/ available for `docker build -f deploy/Dockerfile`.
+# Keep benchmarks/_results/ because Phase 5 API endpoints serve these artefacts.
+.next/
+node_modules/
+
+# Local env
+.env
+.env.local
+.envrc
+
+# Documentation
+*.md
+!README.md
+
+# Misc
+.gemini/
