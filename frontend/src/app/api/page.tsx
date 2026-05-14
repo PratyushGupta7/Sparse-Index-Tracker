@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { API_URL } from "@/lib/env";
 
 export const metadata: Metadata = {
   title: "API explorer",
@@ -35,7 +34,7 @@ const CURL_EXAMPLES = [
 ];
 
 export default function ApiPage() {
-  const base = API_URL;
+  const base = "/api/proxy";
   return (
     <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6">
       <header className="space-y-2">
@@ -44,8 +43,8 @@ export default function ApiPage() {
           Open API · no auth · slowapi rate-limit only
         </h1>
         <p className="max-w-3xl text-[var(--muted-foreground)]">
-          Current API base URL: <code className="font-mono">{base}</code>. CORS allowlist, Redis
-          caching, telemetry, and rate limits are env-var driven.
+          Explore the sparse index replication API through this site&apos;s secure proxy. CORS
+          allowlist, Redis caching, telemetry, and rate limits are env-var driven.
         </p>
       </header>
 
@@ -71,8 +70,7 @@ export default function ApiPage() {
       <section className="mt-8 space-y-2 rounded-xl border border-[var(--border)] bg-[var(--card)] p-6">
         <h2 className="text-xl font-semibold">Swagger UI</h2>
         <p className="text-sm text-[var(--muted-foreground)]">
-          Open <code className="font-mono">{base}/docs</code> in a new tab, or use the embedded
-          Swagger UI below.
+          Use the embedded Swagger UI below to inspect endpoints and schemas.
         </p>
         <iframe
           src={`${base}/docs`}

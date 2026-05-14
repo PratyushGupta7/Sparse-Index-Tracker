@@ -16,9 +16,7 @@ export default function InvestPage() {
         <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Live ADMM retrain</h1>
         <p className="max-w-3xl text-[var(--muted-foreground)]">
           Enter how much you&apos;d allocate. The API will pull the last 120 trading days, retrain
-          ADMM from scratch, and return shares to buy at today&apos;s prices. Open{" "}
-          <code className="font-mono">localhost:8000</code> first (or set{" "}
-          <code className="font-mono">NEXT_PUBLIC_API_URL</code>).
+          ADMM from scratch, and return shares to buy at today&apos;s prices.
         </p>
       </header>
 

@@ -112,28 +112,6 @@ export default async function ResearchPage() {
         </p>
         <ConvergenceAnim data={convergence} />
       </section>
-
-      <section className="mt-8 rounded-xl border border-[var(--border)] bg-[var(--card)] p-6">
-        <h2 className="text-2xl font-semibold">Read more</h2>
-        <ul className="mt-2 space-y-1 text-sm">
-          <li>
-            <a
-              className="text-[var(--primary)] underline"
-              href="https://github.com/PratyushGupta7/Sparse-Index-Tracker/blob/main/Proofs.md"
-            >
-              Proofs.md — full convergence + reweighted-ℓ₁ derivations
-            </a>
-          </li>
-          <li>
-            <a
-              className="text-[var(--primary)] underline"
-              href="https://github.com/PratyushGupta7/Sparse-Index-Tracker/blob/main/report.md"
-            >
-              report.md — long-form analysis (~1100 lines)
-            </a>
-          </li>
-        </ul>
-      </section>
     </div>
   );
 }
