@@ -1,0 +1,35 @@
+# Walk-forward 2018 → 2025, weekly rebalance, 10 bps round-trip.
+#
+# Run with:
+#     python -m benchmarks.walkforward --config configs/wf_2018_2025.yaml
+#
+# Notes
+# -----
+# - We use a 120 trading-day rolling lookback (≈ 6 calendar months).
+# - We deliberately *omit* MIQP from the methods list — at p ≈ 500 each refit
+#   would take 60–90 s and the orchestrator does ~400 refits over 8 years,
+#   blowing past the 15-minute end-to-end budget. The Phase-2 head-to-head
+#   table establishes that ADMM tracks MIQP within 0.3 pp R² in 1/1060 the
+#   wall time, so the convex methods + naive baselines are sufficient here.
+# - ``BIL`` (1-3 month T-bill ETF) provides the cash-residual return.
+# - Survivorship-bias note: this run uses today's S&P 500 membership; flag
+#   ``survivorship_bias_flag`` is set to ``true`` in the resulting JSON.
+
+start_date: "2018-01-01"
+end_date: "2025-12-31"
+lookback_days: 120
+rebalance: "weekly"
+tx_bps: 5.0          # 10 bps round-trip
+initial_capital: 1000000
+cash_proxy_ticker: "BIL"
+benchmark_ticker: "SPY"
+methods:
+  - admm
+  - lasso
+  - omp
+  - equal_weight_topn
+  - benchmark
+lam_frac: 0.05
+K: 50
+seed: 20260511
+threshold: 1.0e-6
