@@ -1,0 +1,314 @@
+{
+  "bear_covid": {
+    "regime": "\ud83d\udc3b Bear: COVID Crash",
+    "short": "COVID 2020",
+    "type": "Bear",
+    "color": "#DC2626",
+    "description": "COVID-19: -34% drawdown, VIX 82, circuit breakers, global shutdown",
+    "train_start": "2019-08-02",
+    "train_end": "2020-01-23",
+    "test_start": "2020-01-24",
+    "test_end": "2020-04-20",
+    "n_stocks_universe": 485,
+    "n_active": 44,
+    "r2_train": 0.9518592631117965,
+    "r2_test": 0.9634288688655946,
+    "te_train": 2.719316063520269,
+    "te_test": 11.35085731595237,
+    "correlation": 0.9923547603886805,
+    "max_daily_diff_pct": 2.303013603890483,
+    "max_cumulative_diff": 0.03384991056544029,
+    "converged": true,
+    "iterations": 212,
+    "lambda": 0.041230949841578594,
+    "lambda_max": 0.8246189968315718,
+    "top_3_holdings": [
+      [
+        "MSFT",
+        0.1672949125108831
+      ],
+      [
+        "RTX",
+        0.09612598466572699
+      ],
+      [
+        "AAPL",
+        0.08279151363407873
+      ]
+    ],
+    "elapsed_seconds": 26.3
+  },
+  "bear_2018q4": {
+    "regime": "\ud83d\udc3b Bear: 2018 Q4 Selloff",
+    "short": "2018 Q4 Selloff",
+    "type": "Bear",
+    "color": "#B91C1C",
+    "description": "Fed tightening + trade war fears: -20% drawdown, VIX 36, near bear market",
+    "train_start": "2018-03-02",
+    "train_end": "2018-08-21",
+    "test_start": "2018-08-22",
+    "test_end": "2018-11-14",
+    "n_stocks_universe": 477,
+    "n_active": 72,
+    "r2_train": 0.9748181598542108,
+    "r2_test": 0.9668970733811241,
+    "te_train": 2.0140781786660793,
+    "te_test": 2.8811109149570595,
+    "correlation": 0.988375375959478,
+    "max_daily_diff_pct": 0.49567523335502406,
+    "max_cumulative_diff": 0.01092822586254949,
+    "converged": true,
+    "iterations": 181,
+    "lambda": 0.024222893768457467,
+    "lambda_max": 0.8074297922819156,
+    "top_3_holdings": [
+      [
+        "MSFT",
+        0.07609628502794545
+      ],
+      [
+        "TROW",
+        0.055054905156629357
+      ],
+      [
+        "ABT",
+        0.04271817402281361
+      ]
+    ],
+    "elapsed_seconds": 24.9
+  },
+  "volatile_2022": {
+    "regime": "\ud83d\udcc9 Volatile: 2022 Rate Hikes",
+    "short": "Rate Hikes 2022",
+    "type": "Volatile",
+    "color": "#F59E0B",
+    "description": "Fed tightening: 0%\u21924.5% rates, growth\u2192value rotation, -20%",
+    "train_start": "2021-06-02",
+    "train_end": "2021-11-18",
+    "test_start": "2021-11-19",
+    "test_end": "2022-02-15",
+    "n_stocks_universe": 494,
+    "n_active": 62,
+    "r2_train": 0.9547444910313883,
+    "r2_test": 0.9662638525015476,
+    "te_train": 2.1193094656811806,
+    "te_test": 3.3949932038555426,
+    "correlation": 0.9891191047890894,
+    "max_daily_diff_pct": 0.5786594795814768,
+    "max_cumulative_diff": 0.01671187005192698,
+    "converged": true,
+    "iterations": 185,
+    "lambda": 0.029752655569719302,
+    "lambda_max": 0.595053111394386,
+    "top_3_holdings": [
+      [
+        "MSFT",
+        0.11357912415274306
+      ],
+      [
+        "AAPL",
+        0.08899089613379231
+      ],
+      [
+        "AMP",
+        0.07619148890602524
+      ]
+    ],
+    "elapsed_seconds": 24.9
+  },
+  "volatile_2018vol": {
+    "regime": "\ud83d\udcc9 Volatile: 2018 Volmageddon",
+    "short": "Volmageddon 2018",
+    "type": "Volatile",
+    "color": "#D97706",
+    "description": "Feb 5 2018: VIX 17\u219250 in one day, XIV collapse (-90%), S&P -10% in 2 weeks",
+    "train_start": "2017-06-02",
+    "train_end": "2017-11-20",
+    "test_start": "2017-11-21",
+    "test_end": "2018-02-16",
+    "n_stocks_universe": 476,
+    "n_active": 70,
+    "r2_train": 0.9268049959287104,
+    "r2_test": 0.9732250680512179,
+    "te_train": 1.6806809512559862,
+    "te_test": 2.5925991600793146,
+    "correlation": 0.9879937217015594,
+    "max_daily_diff_pct": 0.5704712051127933,
+    "max_cumulative_diff": 0.009149667807770712,
+    "converged": true,
+    "iterations": 144,
+    "lambda": 0.01755379108585164,
+    "lambda_max": 0.3510758217170328,
+    "top_3_holdings": [
+      [
+        "BRK-B",
+        0.08266932627829027
+      ],
+      [
+        "META",
+        0.052681774666384504
+      ],
+      [
+        "CSCO",
+        0.05167036663318384
+      ]
+    ],
+    "elapsed_seconds": 30.5
+  },
+  "bull_2023": {
+    "regime": "\ud83d\udc02 Bull: AI Rally 2023",
+    "short": "AI Bull 2023",
+    "type": "Bull",
+    "color": "#16A34A",
+    "description": "AI-driven rally: NVDA +200%, mega-cap tech surge, market recovery",
+    "train_start": "2022-06-02",
+    "train_end": "2022-11-21",
+    "test_start": "2022-11-22",
+    "test_end": "2023-02-17",
+    "n_stocks_universe": 496,
+    "n_active": 49,
+    "r2_train": 0.9868756860159962,
+    "r2_test": 0.9592294975887269,
+    "te_train": 2.809855115499475,
+    "te_test": 3.61329191475135,
+    "correlation": 0.9854154620229947,
+    "max_daily_diff_pct": 0.7016156725541872,
+    "max_cumulative_diff": 0.013804931477780835,
+    "converged": true,
+    "iterations": 285,
+    "lambda": 0.08657176579508952,
+    "lambda_max": 1.7314353159017903,
+    "top_3_holdings": [
+      [
+        "BRK-B",
+        0.09782990690376203
+      ],
+      [
+        "AAPL",
+        0.06472221584097346
+      ],
+      [
+        "MSFT",
+        0.06328924789182727
+      ]
+    ],
+    "elapsed_seconds": 27.3
+  },
+  "bull_postcovid": {
+    "regime": "\ud83d\udc02 Bull: Post-COVID Recovery",
+    "short": "Post-COVID 2021",
+    "type": "Bull",
+    "color": "#15803D",
+    "description": "V-shaped recovery: stimulus-fueled rally, retail mania, +70% off lows",
+    "train_start": "2020-05-04",
+    "train_end": "2020-10-21",
+    "test_start": "2020-10-22",
+    "test_end": "2021-01-19",
+    "n_stocks_universe": 488,
+    "n_active": 51,
+    "r2_train": 0.98901954047764,
+    "r2_test": 0.9629460666255371,
+    "te_train": 2.0271588938228904,
+    "te_test": 2.9269692562225273,
+    "correlation": 0.9840401068225015,
+    "max_daily_diff_pct": 0.4028121707426061,
+    "max_cumulative_diff": 0.013981394608993725,
+    "converged": true,
+    "iterations": 233,
+    "lambda": 0.06241929786715225,
+    "lambda_max": 1.248385957343045,
+    "top_3_holdings": [
+      [
+        "AAPL",
+        0.0638159110771231
+      ],
+      [
+        "MSFT",
+        0.06049493500088986
+      ],
+      [
+        "HD",
+        0.05595704602613632
+      ]
+    ],
+    "elapsed_seconds": 15.2
+  },
+  "stable_2024": {
+    "regime": "\ud83d\ude34 Stable: Quiet 2024",
+    "short": "Quiet 2024",
+    "type": "Stable",
+    "color": "#2563EB",
+    "description": "Post-election stability: VIX ~14, steady uptrend, broadening participation, soft landing",
+    "train_start": "2024-03-04",
+    "train_end": "2024-08-22",
+    "test_start": "2024-08-23",
+    "test_end": "2024-11-15",
+    "n_stocks_universe": 499,
+    "n_active": 65,
+    "r2_train": 0.9559840396034058,
+    "r2_test": 0.9215300310295474,
+    "te_train": 2.7021126993833375,
+    "te_test": 3.527786561525397,
+    "correlation": 0.9786545864058553,
+    "max_daily_diff_pct": 0.7632314902162523,
+    "max_cumulative_diff": 0.00777566265265206,
+    "converged": true,
+    "iterations": 234,
+    "lambda": 0.03911247374493953,
+    "lambda_max": 0.7822494748987905,
+    "top_3_holdings": [
+      [
+        "MSFT",
+        0.1268919876107312
+      ],
+      [
+        "BRK-B",
+        0.0666450224985671
+      ],
+      [
+        "AAPL",
+        0.05992094805155093
+      ]
+    ],
+    "elapsed_seconds": 13.6
+  },
+  "stable_2021": {
+    "regime": "\ud83d\ude34 Stable: Mid-2021 Calm",
+    "short": "Mid-2021 Calm",
+    "type": "Stable",
+    "color": "#1D4ED8",
+    "description": "Post-vaccine stability: VIX ~18, steady uptrend, low-vol broadening rally",
+    "train_start": "2020-10-02",
+    "train_end": "2021-03-25",
+    "test_start": "2021-03-26",
+    "test_end": "2021-06-21",
+    "n_stocks_universe": 489,
+    "n_active": 58,
+    "r2_train": 0.9742668690904485,
+    "r2_test": 0.9438444693500293,
+    "te_train": 2.5403742150245474,
+    "te_test": 2.6845118726301567,
+    "correlation": 0.9806855496567087,
+    "max_daily_diff_pct": 0.5097617470592062,
+    "max_cumulative_diff": 0.028347741891705303,
+    "converged": true,
+    "iterations": 193,
+    "lambda": 0.04634062312309757,
+    "lambda_max": 0.9268124624619514,
+    "top_3_holdings": [
+      [
+        "AMZN",
+        0.08666089186152695
+      ],
+      [
+        "AAPL",
+        0.0854537610856578
+      ],
+      [
+        "GOOG",
+        0.06624434850362607
+      ]
+    ],
+    "elapsed_seconds": 15.0
+  }
+}
