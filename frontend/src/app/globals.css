@@ -1,0 +1,119 @@
+@import "tailwindcss";
+@import "katex/dist/katex.min.css";
+
+/* --------------------------------------------------------------------- */
+/* Sparse Index Tracker brand palette (mirrors src/sit/viz/style.py)      */
+/* navy #0B1220 · electric green #22C55E · warm gold #F59E0B             */
+/* --------------------------------------------------------------------- */
+
+:root {
+  --background: #ffffff;
+  --foreground: #0b1220;
+  --muted: #64748b;
+  --muted-foreground: #334155;
+  --card: #ffffff;
+  --card-foreground: #0b1220;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --primary: #22c55e;
+  --primary-foreground: #052e16;
+  --accent: #f59e0b;
+  --accent-foreground: #1f1300;
+  --ring: #22c55e;
+  --grid: #e2e8f0;
+  --code-bg: #f8fafc;
+}
+
+[data-theme="dark"],
+.dark {
+  --background: #0b1220;
+  --foreground: #f1f5f9;
+  --muted: #94a3b8;
+  --muted-foreground: #cbd5e1;
+  --card: #111a2e;
+  --card-foreground: #f1f5f9;
+  --border: #1e293b;
+  --input: #1e293b;
+  --primary: #22c55e;
+  --primary-foreground: #052e16;
+  --accent: #f59e0b;
+  --accent-foreground: #1f1300;
+  --ring: #22c55e;
+  --grid: #1e293b;
+  --code-bg: #0f172a;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-ring: var(--ring);
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-jetbrains);
+}
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: dark light;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code,
+pre,
+.mono {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+}
+
+/* Focus ring visible in both themes — a11y requirement */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Subtle grid background for hero sections */
+.brand-grid {
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in srgb, var(--grid) 60%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--grid) 60%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 40px 40px;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
