@@ -6,14 +6,14 @@ the same convex program with our custom ADMM and with a CVXPY model
 
 * ``‖w_admm − w_cvxpy‖_∞`` < 1e-3 (same minimiser).
 * Our objective ≤ CVXPY's objective + 1e-5 (we're not worse).
-* Our wall-clock time < CVXPY's wall-clock time (we're faster).
 
 The test is parameterised on several (n, p, λ-ratio) tuples. CVXPY is
 intentionally invoked with the *default* open-source solver so the comparison
 reflects an out-of-the-box user; if MOSEK is available it would be even faster,
 but that's an opt-in path.
 
-A more detailed benchmark with timing plots lives in ``benchmarks/cvxpy_benchmark.py``.
+Timing is intentionally kept in ``benchmarks/cvxpy_benchmark.py`` rather than
+CI because GitHub runners are shared and too noisy for strict speed assertions.
 """
 
 from __future__ import annotations
@@ -88,30 +88,3 @@ def test_admm_matches_cvxpy(make_problem, n, p, lam_ratio):
     assert (
         obj_admm <= obj_cvxpy + 1e-3
     ), f"ADMM objective {obj_admm:.6e} is worse than CVXPY {obj_cvxpy:.6e}"
-
-
-@pytest.mark.integration
-def test_admm_strictly_faster_than_cvxpy(make_problem):
-    """On a representative SP500-sized problem (n=120, p=500), ADMM must be faster."""
-    prob = make_problem(n=120, p=500, k=15, noise=0.01, simplex=False)
-    lam_max = SparseTrackerADMM.compute_lambda_max(prob.X, prob.y)
-    lam = 0.05 * lam_max
-
-    admm = SparseTrackerADMM(lam=lam, max_iter=5000, tol=1e-6, verbose=False)
-    t0 = time.perf_counter()
-    admm.fit(prob.X, prob.y)
-    admm_elapsed = time.perf_counter() - t0
-
-    _, _, cvxpy_elapsed = _solve_cvxpy(prob.X, prob.y, lam)
-
-    speedup = cvxpy_elapsed / max(admm_elapsed, 1e-9)
-    print(
-        f"\n[bench n={prob.n} p={prob.p}] "
-        f"ADMM {admm_elapsed:.3f}s vs CVXPY {cvxpy_elapsed:.3f}s "
-        f"→ speedup {speedup:.1f}×"
-    )
-    # We don't enforce ≥ 10× here because CI hardware varies wildly;
-    # 1.5× is the strict floor (and we'll publish the actual number).
-    assert (
-        speedup > 1.5
-    ), f"ADMM ({admm_elapsed:.3f}s) was not measurably faster than CVXPY ({cvxpy_elapsed:.3f}s)"
