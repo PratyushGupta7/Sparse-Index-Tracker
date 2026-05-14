@@ -8,7 +8,10 @@ const OUT = path.resolve(__dirname, "../../docs/images/frontend");
 async function main() {
   await fs.mkdir(OUT, { recursive: true });
   const browser = await chromium.launch();
-  const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, colorScheme: "dark" });
+  const ctx = await browser.newContext({
+    viewport: { width: 1440, height: 900 },
+    colorScheme: "dark",
+  });
   const page = await ctx.newPage();
 
   await page.goto(BASE, { waitUntil: "networkidle" });
@@ -50,14 +53,70 @@ async function main() {
           solver_iterations: 220,
         },
         allocations: [
-          { ticker: "AAPL", shares: 12, price: 178.4, weight: 0.18, allocated: 18000, actual_cost: 2140.8 },
-          { ticker: "MSFT", shares: 5, price: 412.6, weight: 0.16, allocated: 16000, actual_cost: 2063.0 },
-          { ticker: "NVDA", shares: 6, price: 905.1, weight: 0.14, allocated: 14000, actual_cost: 5430.6 },
-          { ticker: "AMZN", shares: 18, price: 178.0, weight: 0.12, allocated: 12000, actual_cost: 3204.0 },
-          { ticker: "GOOG", shares: 22, price: 162.0, weight: 0.10, allocated: 10000, actual_cost: 3564.0 },
-          { ticker: "META", shares: 12, price: 502.0, weight: 0.10, allocated: 10000, actual_cost: 6024.0 },
-          { ticker: "TSLA", shares: 24, price: 220.0, weight: 0.10, allocated: 10000, actual_cost: 5280.0 },
-          { ticker: "JPM", shares: 50, price: 198.0, weight: 0.10, allocated: 10000, actual_cost: 9900.0 },
+          {
+            ticker: "AAPL",
+            shares: 12,
+            price: 178.4,
+            weight: 0.18,
+            allocated: 18000,
+            actual_cost: 2140.8,
+          },
+          {
+            ticker: "MSFT",
+            shares: 5,
+            price: 412.6,
+            weight: 0.16,
+            allocated: 16000,
+            actual_cost: 2063.0,
+          },
+          {
+            ticker: "NVDA",
+            shares: 6,
+            price: 905.1,
+            weight: 0.14,
+            allocated: 14000,
+            actual_cost: 5430.6,
+          },
+          {
+            ticker: "AMZN",
+            shares: 18,
+            price: 178.0,
+            weight: 0.12,
+            allocated: 12000,
+            actual_cost: 3204.0,
+          },
+          {
+            ticker: "GOOG",
+            shares: 22,
+            price: 162.0,
+            weight: 0.1,
+            allocated: 10000,
+            actual_cost: 3564.0,
+          },
+          {
+            ticker: "META",
+            shares: 12,
+            price: 502.0,
+            weight: 0.1,
+            allocated: 10000,
+            actual_cost: 6024.0,
+          },
+          {
+            ticker: "TSLA",
+            shares: 24,
+            price: 220.0,
+            weight: 0.1,
+            allocated: 10000,
+            actual_cost: 5280.0,
+          },
+          {
+            ticker: "JPM",
+            shares: 50,
+            price: 198.0,
+            weight: 0.1,
+            allocated: 10000,
+            actual_cost: 9900.0,
+          },
         ],
         warnings: null,
       }),
