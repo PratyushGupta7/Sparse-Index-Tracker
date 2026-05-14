@@ -1,0 +1,221 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sparse-index-tracker"
+version = "0.1.0"
+description = "Sparse Index Replication Engine — custom ADMM solver for L1-regularized portfolio optimization."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+authors = [{ name = "Pratyush Gupta" }]
+keywords = [
+  "portfolio-optimization",
+  "lasso",
+  "admm",
+  "compressed-sensing",
+  "quantitative-finance",
+  "index-tracking",
+  "sparse-regression",
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Financial and Insurance Industry",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Office/Business :: Financial :: Investment",
+  "Topic :: Scientific/Engineering :: Mathematics",
+]
+dynamic = ["dependencies", "optional-dependencies"]
+
+[project.urls]
+Homepage = "https://github.com/PratyushGupta7/Sparse-Index-Tracker"
+Repository = "https://github.com/PratyushGupta7/Sparse-Index-Tracker"
+Issues = "https://github.com/PratyushGupta7/Sparse-Index-Tracker/issues"
+
+[project.scripts]
+sit = "sit.cli:main"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["sit*"]
+
+[tool.setuptools.dynamic]
+dependencies = { file = ["requirements.txt"] }
+
+[tool.setuptools.dynamic.optional-dependencies]
+dev = { file = ["requirements-dev.txt"] }
+
+
+# =============================================================================
+# Ruff — linter + formatter (replaces flake8 + isort, complements black)
+# =============================================================================
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = [
+  ".venv",
+  "data",
+  "plots",
+  "frontend",
+  "notebooks/_archive",
+]
+
+[tool.ruff.lint]
+select = [
+  "E", "W",     # pycodestyle
+  "F",          # pyflakes
+  "I",          # isort
+  "B",          # flake8-bugbear
+  "UP",         # pyupgrade
+  "C4",         # flake8-comprehensions
+  "SIM",        # flake8-simplify
+  "RUF",        # ruff-specific
+  "N",          # pep8-naming
+  "TID",        # tidy imports
+]
+ignore = [
+  "E501",   # handled by formatter
+  "B008",   # function calls in default args (used by FastAPI Depends)
+  "N803",   # allow uppercase argument names (X, y are conventional)
+  "N806",   # allow uppercase variable names inside functions (math conventions)
+  # We intentionally use Greek letters (ρ, λ, σ, μ, ε) in docstrings — this is
+  # a math library and the unicode is part of the documentation contract.
+  "RUF001", # ambiguous unicode in *strings*
+  "RUF002", # ambiguous unicode in *docstrings*
+  "RUF003", # ambiguous unicode in *comments*
+  "SIM108", # ternary-style "if-else" is fine; readability wins on math code
+  "SIM300", # "K <= K_max" reads naturally as a numeric upper bound
+  "B007",   # unused loop variables (common in numerical iteration patterns)
+  "B905",   # zip(strict=False) is the right default for paired-bar plots
+  "RUF022", # __all__ unsorted (we sort logically, not alphabetically)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["S101", "N802", "PLR2004"]
+"benchmarks/**/*.py" = ["T201"]
+"notebooks/**/*.py" = ["E402", "T201"]
+# Legacy modules moved verbatim from src/{solver,data_loader,backtester,
+# regime_tester}.py in Phase 0 — keep their pre-existing style. They get a
+# proper refactor in Phases 3 + 4 (walk-forward) and Phase 2 (baselines).
+"src/sit/solvers/admm.py" = ["UP", "C4", "SIM", "N", "B", "RUF013"]
+"src/sit/data/loader.py" = ["UP", "C4", "SIM", "N", "B", "F841", "RUF013"]
+"src/sit/backtest/phase3_validator.py" = ["UP", "C4", "SIM", "N", "B", "F841", "E741", "E402", "RUF013", "RUF059"]
+"src/sit/regimes/tester.py" = ["UP", "C4", "SIM", "N", "B", "F841", "E741", "E402", "RUF013", "RUF059"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+docstring-code-format = true
+
+
+# =============================================================================
+# Black — code formatter (kept alongside ruff format for now)
+# =============================================================================
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+extend-exclude = '''
+/(
+    \.venv
+  | data
+  | plots
+  | frontend
+  | \.next
+)/
+'''
+
+
+# =============================================================================
+# Mypy — static type checking
+# =============================================================================
+[tool.mypy]
+python_version = "3.11"
+mypy_path = "src"
+packages = ["sit"]
+strict_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_unreachable = true
+disallow_untyped_defs = false      # Phase 0: relaxed; tighten in later phases
+disallow_incomplete_defs = false
+check_untyped_defs = true
+no_implicit_optional = true
+show_error_codes = true
+
+[[tool.mypy.overrides]]
+module = [
+  "yfinance.*",
+  "cvxpy.*",
+  "mosek.*",
+  "scipy.*",
+  "matplotlib.*",
+  "sklearn.*",
+  "redis.*",
+  "slowapi.*",
+]
+ignore_missing_imports = true
+
+
+# =============================================================================
+# Pytest
+# =============================================================================
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+addopts = [
+  "-ra",
+  "--strict-markers",
+  "--strict-config",
+  "--tb=short",
+  "--cov=sit",
+  "--cov-report=term-missing:skip-covered",
+  "--cov-report=xml:coverage.xml",
+  # By default we skip network-bound real-data smoke tests. Opt in with
+  # ``pytest -m network`` (or ``pytest -m slow``) when you want them.
+  "-m",
+  "not network and not slow",
+]
+filterwarnings = [
+  "ignore::DeprecationWarning",
+  "ignore::PendingDeprecationWarning",
+  "ignore::FutureWarning:yfinance.*",
+]
+markers = [
+  "slow: marks tests as slow (deselect with -m 'not slow')",
+  "network: marks tests that require network access",
+  "mosek: marks tests that require MOSEK licence",
+  "integration: marks integration tests (require optional deps)",
+]
+
+
+# =============================================================================
+# Coverage
+# =============================================================================
+[tool.coverage.run]
+branch = true
+source = ["sit"]
+omit = [
+  "src/sit/cli.py",
+  "src/sit/api/*",
+  "tests/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+  "pragma: no cover",
+  "raise NotImplementedError",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
+precision = 1
+show_missing = true

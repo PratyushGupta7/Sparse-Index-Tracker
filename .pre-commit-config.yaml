@@ -1,0 +1,43 @@
+# =============================================================================
+# pre-commit hooks — runs `ruff`, `black`, `mypy` on staged Python files.
+# Install with:  make install-dev  (or  pre-commit install  directly)
+# =============================================================================
+default_language_version:
+  python: python3.11
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: \.(md|tex)$
+      - id: end-of-file-fixer
+        exclude: \.(md|tex)$
+      - id: check-yaml
+      - id: check-toml
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: [--maxkb=5000]
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.6.9
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+
+  - repo: https://github.com/psf/black
+    rev: 24.10.0
+    hooks:
+      - id: black
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.13.0
+    hooks:
+      - id: mypy
+        additional_dependencies:
+          - numpy>=2.0
+          - pandas-stubs
+          - types-requests
+        args: [--config-file=pyproject.toml]
+        exclude: ^(tests|benchmarks|notebooks)/

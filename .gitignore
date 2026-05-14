@@ -1,0 +1,118 @@
+# =============================================================================
+# Python
+# =============================================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+/lib/
+/lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# PEP 582
+__pypackages__/
+
+# =============================================================================
+# Testing / coverage
+# =============================================================================
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.nox/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+*.cover
+.hypothesis/
+
+# =============================================================================
+# Jupyter
+# =============================================================================
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# =============================================================================
+# Secrets / env
+# =============================================================================
+.env
+.env.local
+.env.*.local
+*.env.local
+.envrc
+deploy/azure/.env
+
+# =============================================================================
+# Frontend (Phase 7)
+# =============================================================================
+frontend/node_modules/
+frontend/.next/
+frontend/.vercel/
+frontend/.turbo/
+frontend/out/
+frontend/build/
+frontend/.pnpm-store/
+node_modules/
+.next/
+.vercel/
+
+# =============================================================================
+# OS / editor cruft
+# =============================================================================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# =============================================================================
+# Project-specific
+# =============================================================================
+# Pickled/cached intermediate artefacts (regenerated from data_loader)
+data/cache/
+data/raw/
+data/_tmp/
+
+# Generated benchmark artefacts
+# Keep JSON artefacts because the deployed API serves them; ignore bulky plots.
+benchmarks/_results/*
+!benchmarks/_results/
+!benchmarks/_results/*.json
+
+# LaTeX build (Phase 9)
+paper/*.aux
+paper/*.log
+paper/*.out
+paper/*.bbl
+paper/*.blg
+paper/*.synctex.gz
+paper/*.fls
+paper/*.fdb_latexmk
+
+# Logs
+logs/
+*.log
