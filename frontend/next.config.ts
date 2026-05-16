@@ -11,6 +11,14 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "**.companieslogo.com" },
     ],
   },
+  async rewrites() {
+    return [
+      {
+        source: "/openapi.json",
+        destination: "/api/proxy/openapi.json",
+      },
+    ];
+  },
   async headers() {
     return [
       {

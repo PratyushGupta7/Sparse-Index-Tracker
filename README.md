@@ -211,19 +211,18 @@ number of training days and `N` is the number of stocks in the universe. Let `y`
 the benchmark return vector over the same dates. The goal is to learn weights `w`
 so that `Xw` behaves like `y`, while most entries of `w` become zero.
 
-The base problem is:
+The base problem is the long-only sparse tracking objective:
 
-```text
-minimize_w  1/2 ||Xw - y||_2^2 + lambda ||w||_1
-subject to  w >= 0
-```
+$$
+\min_{w \ge 0} \; \frac{1}{2}\lVert Xw - y \rVert_2^2 + λ \lVert w \rVert_1
+$$
 
 After convergence, the positive weights are normalized back onto the fully invested
 simplex so they can be interpreted as portfolio weights:
 
-```text
-w_i >= 0,    sum_i w_i = 1
-```
+$$
+w_i \ge 0, \qquad \sum_i w_i = 1
+$$
 
 In plain language:
 
@@ -234,13 +233,13 @@ In plain language:
 
 ### Why L1 Creates Sparsity
 
-The L1 term `lambda ||w||_1` adds a cost for keeping weights alive. As `lambda`
+The L1 term $λ \lVert w \rVert_1$ adds a cost for keeping weights alive. As `λ`
 increases, small marginal positions are pushed to exactly zero. This creates a
 regularization path:
 
 ```text
-low lambda  -> more stocks, lower tracking error
-high lambda -> fewer stocks, higher tracking error
+low λ  -> more stocks, lower tracking error
+high λ -> fewer stocks, higher tracking error
 ```
 
 The Pareto plot above is the practical version of that statement: it shows how many
@@ -252,10 +251,10 @@ does to out-of-sample tracking error.
 ADMM is a natural fit because it splits the problem into pieces that are easier to
 solve. The implementation introduces an auxiliary variable `z` and enforces `w = z`:
 
-```text
-minimize    1/2 ||Xw - y||_2^2 + lambda ||z||_1 + I(z >= 0)
-subject to  w - z = 0
-```
+$$
+\min_{w,z} \; \frac{1}{2}\lVert Xw - y \rVert_2^2 + λ \lVert z \rVert_1 + I(z \ge 0)
+\quad \text{subject to} \quad w - z = 0
+$$
 
 This gives three interpretable update steps:
 
