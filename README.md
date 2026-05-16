@@ -5,7 +5,7 @@
   <br />
   A sparse index replication engine that compresses broad benchmarks into compact,
   tradable portfolios using a custom ADMM solver, real backtests, a FastAPI backend,
-  and a polished Next.js product surface.
+  and an interactive Next.js frontend.
 </p>
 
 <p align="center">
@@ -41,8 +41,8 @@
 <p align="center">
   <a href="https://sparse-index-tracker.vercel.app">
     <img
-      alt="Sparse Index Tracker preview"
-      src="https://img.shields.io/badge/Live%20Demo-Open%20the%20quant%20terminal-111827?style=for-the-badge"
+      alt="Sparse Index Tracker frontend preview"
+      src="docs/images/frontend/landing.png"
     />
   </a>
 </p>
@@ -62,14 +62,14 @@ Sparse Index Tracker learns a compact basket of stocks that tracks a broad bench
 like the S&P 500. It does that with an L1-regularized optimization problem and a custom
 ADMM solver built specifically for sparse portfolio replication.
 
-The result is a full-stack quant system: research pipeline, solver, validation suite,
-API, cache, cloud deployment, and frontend.
+The result connects the pieces that usually stay separate: research pipeline, solver,
+validation suite, API, cache, cloud deployment, and frontend.
 
 It is designed to be read in layers:
 
 | If you are... | Start here | What you will see |
 | --- | --- | --- |
-| A recruiter or engineering reviewer | [Live Demo](https://sparse-index-tracker.vercel.app) | A complete product, not a notebook screenshot |
+| A recruiter or engineering reviewer | [Live Demo](https://sparse-index-tracker.vercel.app) | The deployed interface and live endpoints |
 | A quant researcher | [Research Lab](https://sparse-index-tracker.vercel.app/research) | Regularization paths, convergence, stress regimes |
 | A backend engineer | [`src/sit/api`](src/sit/api) | FastAPI, Pydantic v2, caching, rate limits, deployment hardening |
 | A numerical optimization reviewer | [`src/sit/solvers`](src/sit/solvers) | ADMM solver internals and sparse optimization logic |
@@ -119,8 +119,23 @@ research pipeline.
 | Supported markets | 4 | S&P 500, Nasdaq-100, Russell 2000, Nifty 50 |
 | Test suite | 274 pytest tests | Backend/research validation coverage |
 
-The important claim is not just that the model works. It is that the model is
-wrapped in enough engineering to be inspected, deployed, tested, and used.
+The result is evaluated both numerically and operationally: solver agreement tests,
+walk-forward validation, regime slices, API tests, and frontend build checks all sit
+in the same repository.
+
+<p align="center">
+  <img
+    alt="Sparsity versus out-of-sample tracking error Pareto frontier"
+    src="plots/sparsity_vs_te_pareto.png"
+  />
+</p>
+
+<p align="center">
+  <sub>
+    Sparsity is controlled by the regularization path. Moving along the curve trades
+    a smaller portfolio for higher out-of-sample tracking error.
+  </sub>
+</p>
 
 ---
 
@@ -191,41 +206,115 @@ flowchart LR
 
 ## Mathematical Core
 
-The optimization problem is a sparse tracking problem:
+Let `X` be a matrix of constituent returns with shape `T x N`, where `T` is the
+number of training days and `N` is the number of stocks in the universe. Let `y` be
+the benchmark return vector over the same dates. The goal is to learn weights `w`
+so that `Xw` behaves like `y`, while most entries of `w` become zero.
+
+The base problem is:
 
 ```text
-minimize    tracking_loss(w) + lambda * sparsity_penalty(w)
-subject to  portfolio constraints on w
+minimize_w  1/2 ||Xw - y||_2^2 + lambda ||w||_1
+subject to  w >= 0
 ```
 
-In plain English:
+After convergence, the positive weights are normalized back onto the fully invested
+simplex so they can be interpreted as portfolio weights:
+
+```text
+w_i >= 0,    sum_i w_i = 1
+```
+
+In plain language:
 
 - match the benchmark return stream,
-- keep the active weight vector small and interpretable,
-- make the solution fast enough to retrain,
-- and expose the result as a usable product.
+- penalize portfolios that need too many names,
+- keep the final allocation long-only,
+- and return weights that can be converted into actual share counts.
+
+### Why L1 Creates Sparsity
+
+The L1 term `lambda ||w||_1` adds a cost for keeping weights alive. As `lambda`
+increases, small marginal positions are pushed to exactly zero. This creates a
+regularization path:
+
+```text
+low lambda  -> more stocks, lower tracking error
+high lambda -> fewer stocks, higher tracking error
+```
+
+The Pareto plot above is the practical version of that statement: it shows how many
+active stocks the model keeps at different regularization strengths and what that
+does to out-of-sample tracking error.
+
+### Why ADMM Fits The Problem
 
 ADMM is a natural fit because it splits the problem into pieces that are easier to
-solve:
+solve. The implementation introduces an auxiliary variable `z` and enforces `w = z`:
+
+```text
+minimize    1/2 ||Xw - y||_2^2 + lambda ||z||_1 + I(z >= 0)
+subject to  w - z = 0
+```
+
+This gives three interpretable update steps:
 
 | ADMM component | Role in this project |
 | --- | --- |
-| Weight update | Solves the smooth tracking objective efficiently |
-| Sparse step | Applies soft-thresholding to encourage fewer active holdings |
-| Dual update | Keeps the split variables consistent |
-| Adaptive rho | Stabilizes convergence across different universes |
-| Residual checks | Provides transparent stopping diagnostics |
+| `w` update | Solves a ridge-like least-squares system |
+| `z` update | Applies positive soft-thresholding, which creates sparsity |
+| `u` update | Updates the scaled dual variable so `w` and `z` agree |
+| Adaptive rho | Rebalances primal and dual progress across different data scales |
+| Residual checks | Stops only when primal and dual feasibility are both small |
 
-The implementation emphasizes readability and reproducibility over hiding everything
-inside a solver call.
+The expensive matrix solve is stabilized with a Cholesky factorization of
+`X'X + rho I`. When `rho` changes, the factorization is recomputed; otherwise the
+cached factor is reused.
+
+### How The Math Was Checked
+
+The mathematical implementation is tested from several angles:
+
+| Check | What it verifies |
+| --- | --- |
+| Synthetic sparse recovery | On controlled problems, the recovered support and weights match the planted sparse portfolio |
+| Lambda-max behavior | Above `lambda_max`, the solver correctly collapses to the zero solution before normalization |
+| Objective trajectory | The recorded objective ends below its starting value |
+| CVXPY agreement | ADMM and CVXPY solve the same convex objective to nearly the same minimizer |
+| LASSO agreement | The sklearn LASSO baseline agrees with ADMM after matching the lambda scaling |
+| Simplex checks | Returned portfolio weights are non-negative and normalized |
+| Walk-forward tests | Rebalanced weights remain valid through the historical simulation |
+| Regime tests | Performance is sliced across distinct market conditions rather than only one full-sample number |
+
+The solver is therefore checked at the mathematical level, the backtest level, and
+the API/product level.
+
+### Robustness Across Regimes
+
+A single full-period backtest can hide where a model is fragile. The regime test
+breaks the validation into distinct market environments: crashes, rate-hike stress,
+volatile periods, bull markets, and calmer windows. This matters because sparse
+portfolios can look good in one smooth trend and fail when correlations shift.
+
+The table below is a useful result because the model keeps high test-set `R2` and
+correlation across very different market conditions while using only a small subset
+of the full universe in each window. It does not prove future performance, but it
+does show that the method is not only fitting one easy sample.
+
+<p align="center">
+  <img
+    alt="Eight-regime sparse index tracking stress-test summary"
+    src="plots/regime_summary.png"
+  />
+</p>
 
 ---
 
 ## Why Not Just Use CVXPY?
 
 CVXPY is excellent for modeling. This project still uses solver baselines for
-comparison, but implements a custom ADMM path because the point is to own the full
-optimization stack.
+comparison, but implements a custom ADMM path so the optimization steps, convergence
+diagnostics, and live retraining behavior are visible in the codebase.
 
 That gives the project:
 
@@ -268,10 +357,10 @@ curl "https://sparse-index-tracker.vercel.app/api/proxy/api/v1/lambda-path?index
 
 ---
 
-## What Makes It Production-Shaped
+## How The System Is Packaged
 
-This is intentionally built like a small production system rather than a single
-research notebook.
+The repository keeps research, API, frontend, and deployment pieces together so each
+claim can be traced to code or an artifact.
 
 | Layer | What is included |
 | --- | --- |
@@ -301,7 +390,7 @@ research notebook.
 |-- frontend/                      # Next.js product frontend
 |-- deploy/                        # Dockerfile and Azure deployment scripts
 |-- docker-compose.yml             # Local API + Redis stack
-`-- PHASE6_AZURE_DEPLOYMENT_RUNBOOK.md
+`-- README.md
 ```
 
 Files worth reading first:
@@ -419,11 +508,9 @@ The live system is deployed as:
 | Observability | Application Insights + Log Analytics |
 | CI | GitHub Actions |
 
-The Azure path is documented in beginner-friendly detail here:
-
-```text
-PHASE6_AZURE_DEPLOYMENT_RUNBOOK.md
-```
+Deployment scripts live under `deploy/azure`, while credentials and cloud-specific
+values are supplied through local environment files, Azure secrets, or GitHub
+Actions variables.
 
 ---
 
@@ -465,8 +552,8 @@ lock it down.
 ### Why do live runs sometimes take time?
 
 `/invest_live` retrains from recent market data and fetches current prices. That is
-more impressive than serving a static JSON file, but it depends on external data
-providers and may take several seconds.
+different from serving a static JSON file: it depends on external data providers and
+may take several seconds.
 
 ### Why sparse portfolios?
 
