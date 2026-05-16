@@ -65,6 +65,50 @@ ADMM solver built specifically for sparse portfolio replication.
 The result connects the pieces that usually stay separate: research pipeline, solver,
 validation suite, API, cache, cloud deployment, and frontend.
 
+## What Problem This Solves
+
+Broad index exposure is easy if you buy an ETF. It becomes harder when you want the
+index behavior but also want control over the actual holdings.
+
+Sparse tracking is useful when the question changes from:
+
+```text
+Can I buy the index?
+```
+
+to:
+
+```text
+Can I keep most of the index behavior while holding far fewer stocks?
+```
+
+That matters in several real settings:
+
+| Problem | Why a sparse tracker helps |
+| --- | --- |
+| Too many names to trade | A 500-stock benchmark creates hundreds of orders, fills, corporate actions, and reconciliation events |
+| Transaction-cost drag | Trading roughly 50-70 names instead of the full universe can reduce turnover mechanics and execution burden |
+| Direct indexing | The investor owns individual stocks, so the portfolio can be customized rather than hidden inside an ETF wrapper |
+| Tax-loss harvesting | Individual holdings make it possible to realize losses stock-by-stock while maintaining benchmark-like exposure |
+| Custom exclusions | Stocks can be removed for ESG, compliance, liquidity, employer restrictions, or personal preference |
+| Explainability | A 50-stock basket is easier to inspect than a 500-stock basket, especially for risk and attribution reviews |
+| Research and teaching | The problem is a clean bridge between high-dimensional statistics, convex relaxation, and portfolio construction |
+
+The mathematical reason this is non-trivial is that the return matrix is
+high-dimensional. A typical training window might use `T = 120` trading days and
+`N = 502` stocks, so there are more variables than observations. Directly searching
+for the best 50-stock subset would require a combinatorial search over possible
+stock baskets. The project replaces that hard subset search with an L1-regularized
+convex relaxation that can be solved and validated repeatedly.
+
+In practical terms, this project can be used as:
+
+- a prototype for direct-indexing research,
+- a benchmark-replication engine for constrained portfolios,
+- a teaching example for L0-to-L1 relaxation and ADMM,
+- a backend service that turns capital into share-level allocations,
+- and a deployed demonstration of how quant research becomes an API and product.
+
 It is designed to be read in layers:
 
 | If you are... | Start here | What you will see |
