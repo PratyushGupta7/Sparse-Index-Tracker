@@ -1,5 +1,7 @@
 # Sparse Index Tracker
 
+> Replicate the S&P 500, Nasdaq-100, Russell 2000, and Nifty 50 with roughly 10% of each index's constituents using a custom ADMM solver for sparse, L1-regularized portfolio optimization.
+
 <p align="center">
   <b>Track the market. Hold the essence.</b>
   <br />
@@ -41,7 +43,7 @@
 <p align="center">
   <a href="https://sparse-index-tracker.vercel.app">
     <img
-      alt="Sparse Index Tracker frontend preview"
+      alt="Sparse Index Tracker — S&P 500 replication dashboard built with ADMM, FastAPI, and Next.js"
       src="docs/images/frontend/landing.png"
     />
   </a>
@@ -49,7 +51,7 @@
 
 ---
 
-## The Idea
+## What Is Sparse Index Tracking?
 
 Most people think of index tracking as a solved problem: buy the whole index, or buy
 an ETF that does it for you.
@@ -60,10 +62,12 @@ This project asks a harder question:
 
 Sparse Index Tracker learns a compact basket of stocks that tracks a broad benchmark
 like the S&P 500. It does that with an L1-regularized optimization problem and a custom
-ADMM solver built specifically for sparse portfolio replication.
+Alternating Direction Method of Multipliers (ADMM) solver built specifically for sparse portfolio replication.
 
 The result connects the pieces that usually stay separate: research pipeline, solver,
 validation suite, API, cache, cloud deployment, and frontend.
+
+*Keywords: sparse index tracking, index replication, ADMM solver, L1 regularization, LASSO portfolio, convex optimization, direct indexing, tax-loss harvesting, walk-forward backtesting, quantitative finance, FastAPI, Next.js.*
 
 ## What Problem This Solves
 
@@ -353,7 +357,7 @@ does show that the method is not only fitting one easy sample.
 
 ---
 
-## Why Not Just Use CVXPY?
+## Why a Custom ADMM Solver Instead of CVXPY?
 
 CVXPY is excellent for modeling. This project still uses solver baselines for
 comparison, but implements a custom ADMM path so the optimization steps, convergence
@@ -611,6 +615,16 @@ This repository is for research and educational use only. It is not financial ad
 an offer to buy or sell securities, or a recommendation to deploy capital. Market data
 can be delayed, incomplete, or unavailable. Backtests are historical simulations, and
 live retraining results can change across runs.
+
+---
+
+## Citation
+
+If you reference this project, please cite:
+
+> Gupta, P. (2026). *Sparse Index Tracker: ADMM-based sparse replication of major equity indices.* GitHub. https://github.com/PratyushGupta7/Sparse-Index-Tracker
+
+A machine-readable [`CITATION.cff`](CITATION.cff) is included at the repo root.
 
 ---
 

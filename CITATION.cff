@@ -1,0 +1,31 @@
+cff-version: 1.2.0
+title: "Sparse Index Tracker"
+message: "If you use this software, please cite it as below."
+type: software
+authors:
+  - family-names: Gupta
+    given-names: Pratyush
+    orcid: ""
+repository-code: "https://github.com/PratyushGupta7/Sparse-Index-Tracker"
+url: "https://sparse-index-tracker.vercel.app"
+abstract: >-
+  Sparse index replication engine that tracks major equity indices
+  (S&P 500, Nasdaq-100, Russell 2000, Nifty 50) with roughly 10% of
+  each index's constituents using a custom ADMM solver for
+  L1-regularized, long-only portfolio optimization. Includes
+  walk-forward backtests, eight-regime stress tests, a FastAPI
+  backend, a Next.js frontend, and a full cloud deployment.
+keywords:
+  - sparse index tracking
+  - index replication
+  - portfolio optimization
+  - ADMM
+  - L1 regularization
+  - convex optimization
+  - direct indexing
+  - tax-loss harvesting
+  - quantitative finance
+  - LASSO
+license: MIT
+version: "1.0.0"
+date-released: "2026-05-20"
