@@ -113,16 +113,16 @@ In practical terms, this project can be used as:
 - a backend service that turns capital into share-level allocations,
 - and a deployed demonstration of how quant research becomes an API and product.
 
-It is designed to be read in layers:
+The repository is designed to be read in layers:
 
-| If you are... | Start here | What you will see |
-| --- | --- | --- |
-| A recruiter or engineering reviewer | [Live Demo](https://sparse-index-tracker.vercel.app) | The deployed interface and live endpoints |
-| A quant researcher | [Research Lab](https://sparse-index-tracker.vercel.app/research) | Regularization paths, convergence, stress regimes |
-| A backend engineer | [`src/sit/api`](src/sit/api) | FastAPI, Pydantic v2, caching, rate limits, deployment hardening |
-| A numerical optimization reviewer | [`src/sit/solvers`](src/sit/solvers) | ADMM solver internals and sparse optimization logic |
-| A frontend/product reviewer | [`frontend`](frontend) | Next.js 16, interactive charts, live forms, API proxy |
-| A DevOps reviewer | [`deploy`](deploy) | Docker, Azure Container Apps, Redis, CI/CD runbooks |
+| Entry point | What you will see |
+| --- | --- |
+| [Live Demo](https://sparse-index-tracker.vercel.app) | The deployed product and live endpoints |
+| [Research Lab](https://sparse-index-tracker.vercel.app/research) | Regularization paths, convergence, and stress regimes |
+| [`src/sit/solvers`](src/sit/solvers) | Custom ADMM solver and sparse optimization internals |
+| [`src/sit/api`](src/sit/api) | FastAPI app, Pydantic v2 schemas, caching, and rate limits |
+| [`frontend`](frontend) | Next.js 16 frontend with interactive charts, live forms, and API proxy |
+| [`deploy`](deploy) | Docker, Azure Container Apps, and Redis deployment scripts |
 
 ---
 
@@ -417,7 +417,6 @@ claim can be traced to code or an artifact.
 | Frontend | Next.js 16, TypeScript, Tailwind, charts, live forms, Vercel deployment |
 | Cloud | Docker, Azure Container Apps, Azure Cache for Redis, App Insights |
 | CI | Python lint/type/test workflow and frontend type/lint/build workflow |
-| Security posture | Secrets kept out of code, env-driven config, no committed cloud credentials |
 
 ---
 
@@ -555,9 +554,7 @@ The live system is deployed as:
 | Observability | Application Insights + Log Analytics |
 | CI | GitHub Actions |
 
-Deployment scripts live under `deploy/azure`, while credentials and cloud-specific
-values are supplied through local environment files, Azure secrets, or GitHub
-Actions variables.
+Deployment scripts live under `deploy/azure`.
 
 ---
 
